@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block containt %}
+<head>
+      <style>
+        .style{
+          /* transform: translate(-50%, -50%); */
+          background: white;
+          border-radius: 10px;
+          width: 98%;
+          margin: 2% 1%;
+          box-shadow: 10px 10px 15px rgb(0 0 0 / 5%);
+          height: auto;
+        }
+        .add-details{
+          padding: 10px;
+          margin: 10px;
+          border: 3px solid black;
+          border-radius: 20px;
+          background-color: aqua;
+          font-size: 20px;
+          font-weight: bold;
+          text-decoration: none;
+        }
+      </style>
+      <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+    <title>Signup</title>
+</head>
+<br>
+<img src="{{data.image.url}}"  alt="image"  onerror="this.src='../static/dafault.png'" style="width: 200px;">
+<hr>
+<h1>Name:</h1><h3> {{data.first_name}} {{data.last_name}}</h3>
+{% if user.is_staff is True %}
+<h1>Qualification: </h1><h3> {{data.qualification_higest}}</h3>
+<h1>Specilization: </h1><h3>{{data.specilization}}</h3>
+<h1>About: </h1><p>{{data.about}}</p>
+{% endif %}
+<h1>Phone No. : </h1><h3>{{data.phone_no}}</h3>
+<h1>Address Line 1: </h1><h3>{{data.add_line_1}}</h3>
+<h1>City: </h1><h3>{{data.add_city}}</h3>
+<h1>State:</h1><h3>{{data.add_state}}</h3>
+<h1>Pincode: </h1><h3>{{data.add_Pincode}}</h3>
+<hr>
+<br>
+<a class="edit-details" href="/edit-details/">Edit Details</a>
+<br>
+{% endblock %}

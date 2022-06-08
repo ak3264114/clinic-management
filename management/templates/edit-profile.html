@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block containt %}
+<head>
+      <style>
+        .form{
+          /* transform: translate(-50%, -50%); */
+          background: white;
+          border-radius: 10px;
+          width: 98%;
+          margin: 2% 1%;
+          box-shadow: 10px 10px 15px rgb(0 0 0 / 5%);
+          height: auto;
+        }
+      </style>
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Signup</title>
+</head>
+<div class="space">
+  <div class="form">
+    <h3>Edit Details</h3>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong style="color: red;">Message:</strong> {{ message }}
+    </div>
+    {% endfor %}
+   <form method="post" action="/update/">
+        {% csrf_token %}
+        <div class="address row mb-4">
+            <div class="input col">
+                <div class="form-outline">
+                    <label>First Name</label>
+                    <input type="text"  name="first_name" value="{{profile_data.first_name}}">
+                </div>
+            </div>
+            <div class="input col">
+                <div class="form-outline">
+                    <label>Last Name</label>
+                    <input type="text"  name="last_name" value="{{profile_data.last_name}}">
+                </div>
+            </div>
+        </div>
+        <div class="address row mb-4">
+            <!-- <div class="input col">
+                <div class="form-outline">
+                    <label for="username">Profile picture</label>
+                    <input type="file" name="image" value="{{profile_data.image}}" accept="image/*">
+                </div>
+            </div> -->
+            <div class="input col">
+                <div class="form-outline">
+                    <label for="username">Phone No.</label>
+                    <input type="text" name="phone_no" value="{{profile_data.phone_no}}">
+                </div>
+            </div>
+            <div class="input col">
+                <div class="form-outline">
+                    <label>Address Line 1</label>
+                    <input type="text" name="add_line_1" value="{{profile_data.add_line_1}}">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="input col">
+                <div class="form-outline">
+                    <label>City</label>
+                    <input type="text" name="add_city" value="{{profile_data.add_city}}">
+                </div>
+            </div>
+            <div class="input col">
+                <div class="form-outline">
+                    <label>State</label>
+                    <input type="text" name="add_city" value="{{profile_data.add_state}}">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="input col">
+                <div class="form-outline" style="width: 38%;">
+                    <label>Pincode</label>
+                    <input type="text" name="add_city" value="{{profile_data.add_Pincode}}">
+                </div>
+            </div>
+        </div>
+        {%if user.is_staff%}
+            <div class="input col">
+                <div class="form-outline">
+                    <label>Higest Qualification</label>
+                    <input type="text" name="qualification_higest" value="{{profile_data.qualification_higest}}">
+                </div>
+            </div>
+        <div class="input">
+            <label for="specilization">Specilization</label>
+            <input type="text" name="qualification_higest" value="{{profile_data.qualification_higest}}" >
+        </div>
+        {%endif%}
+        <br>
+        <div class="submit">
+            <input type="submit" value="Update">
+        </div>
+    </form>
+    <br>
+    <hr>
+</div>
+</div>
+{% endblock %}
