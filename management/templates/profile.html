@@ -29,19 +29,82 @@
 <br>
 <img src="{{data.image.url}}"  alt="image"  onerror="this.src='../static/dafault.png'" style="width: 200px;">
 <hr>
-<h1>Name:</h1><h3> {{data.first_name}} {{data.last_name}}</h3>
+<h1>Name: {{data.first_name}} {{data.last_name}}</h1>
 {% if user.is_staff is True %}
-<h1>Qualification: </h1><h3> {{data.qualification_higest}}</h3>
-<h1>Specilization: </h1><h3>{{data.specilization}}</h3>
-<h1>About: </h1><p>{{data.about}}</p>
+<h1>Qualification: {{data.qualification_higest}}</h1>
+<h1>Specilization: {{data.specilization}}</h1>
+<h1>About: {{data.about}}</h1>
 {% endif %}
-<h1>Phone No. : </h1><h3>{{data.phone_no}}</h3>
-<h1>Address Line 1: </h1><h3>{{data.add_line_1}}</h3>
-<h1>City: </h1><h3>{{data.add_city}}</h3>
-<h1>State:</h1><h3>{{data.add_state}}</h3>
-<h1>Pincode: </h1><h3>{{data.add_Pincode}}</h3>
+<h1>Phone No. : {{data.phone_no}}</h1>
+<h1>Address Line 1: {{data.add_line_1}}</h1>
+<h1>City: {{data.add_city}}</h1>
+<h1>State: {{data.add_state}}</h1>
+<h1>Pincode: {{data.add_Pincode}}</h1>
 <hr>
 <br>
 <a class="edit-details" href="/edit-details/">Edit Details</a>
 <br>
+
+{% if user.is_staff%}
+<hr style="color: black;border: 3px solid black;">
+<h1 style="text-align: center; color: aqua;">Your Appointment</h1>
+<hr style="color: black;border: 3px solid black;">
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <strong style="color: red;">Message:</strong> {{ message }}
+</div>
+{% endfor %}
+
+
+{%if appointment%}
+{{appointment}}
+<div class="row g-0 card-row body-2">
+  {%for appointments in appointment%}
+  {{ appointments}}
+  <div class="card card-box" style="width: 20rem; margin: 20px ;">
+    <!-- <img class="card-img-top" src="{{appointment.image.url}}" alt="{{appointment.image.url}}" style="height: 20rem;" > -->
+    <div class="card-body">
+      <h5 class="card-title">booked for : {{ appointments}} {{appointment.last_name}}</h5>
+      <p class="card-text">About: {{doctor.about}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Specilization: {{appointment.specilization}}</li>
+      <li class="list-group-item">Qualification: {{appointment.qualification_higest}}</li>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<h4 style="text-align:center; margin-bottom: 100px;">you don't have any appointment</h4>
+{% endif %}
+
+<hr style="color: black;border: 3px solid black;">
+<h1 style="text-align: center; color: aqua;">Your Appointment</h1>
+<hr style="color: black;border: 3px solid black;">
+
+{%if contents%}
+<div class="row g-0 card-row body-2">
+  {%for content in contents%}
+  <div class="card card-box" style="width: 25rem; margin: 20px;">
+      <img class="card-img-top" src="{{content.blog_image.url}}" style="height: 20rem;" >
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h4 style="color: blue;" class="card-title">{{content.blog_title}}</h4><small>{{content.blog_views}} Views</small></li>
+        <li class="list-group-item"><p id="{{content.id}}" class="card-text">{{content.blog_summary}}</p></li>
+        <li class="list-group-item">Catogory: {{content.blog_category}}</li>
+        <li class="list-group-item"><a href="/blog/view-blog/{{content.id}}" class="btn btn-primary">Read More</a></li>
+        {% if content.blog_is_post is True %}
+        <li class="list-group-item"><h3>Status : Post</h3></li>
+        <li class="list-group-item"><a class="btn btn-primary" href="/blog/draft-blog/{{content.id}}">Make Draft</a></li>
+        {% endif %}
+        {% if content.blog_is_post is False %}
+        <li class="list-group-item"><h3>Status : Draft</h3></li>
+        <li class="list-group-item"><a class="btn btn-primary" href="/blog/post-blog/{{content.id}}">Post</a></li>
+        {% endif %}
+      </ul>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<h4 style="text-align:center; margin-bottom: 100px;">you haven't  uploaded any blog</h4>
+{% endif %}
+{% endif %}
 {% endblock %}

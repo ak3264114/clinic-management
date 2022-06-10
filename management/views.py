@@ -3,12 +3,14 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout ,login ,authenticate
+from blog.models import Blog
+
 from management.models import Appointment, Doctor, Patient
 
 
 def home(request): 
     if request.user.is_staff :
-        data = Doctor.objects.get(user = request.user)
+        data = Doctor.objects.filter(user = request.user)
         doctors = Doctor.objects.all
         return render(request, 'index.html', {'data': data ,'doctors': doctors })
         # return redirect('add_details')
@@ -16,9 +18,17 @@ def home(request):
         # data = Doctor.objects.get(pk=user_id)
         # return render(request, 'profile.html', {'data': data})
     elif request.user.is_authenticated:
-        data = Patient.objects.get(user = request.user)
-        doctors = Doctor.objects.all
-        return render(request, 'index.html', {'data': data,'doctors': doctors })
+        if  Patient.objects.filter(user = request.user).exists():
+            data = Patient.objects.get(user = request.user)
+            doctors = Doctor.objects.all
+            return render(request, 'index.html', {'data': data,'doctors': doctors })
+        else:
+            return render(request, 'index.html')
+    # elif request.user.is_authenticated:
+        
+    #     data = Patient.objects.get(user = request.user)
+    #     doctors = Doctor.objects.all
+    #     return render(request, 'index.html', {'data': data,'doctors': doctors })
     else:
         doctors = Doctor.objects.all
         return render(request, 'index.html', { 'doctors': doctors})      
@@ -72,7 +82,7 @@ def signup(request):
             myuser.is_staff = True
             myuser.save()
             messages.success(request, "Your Account has been created succesfully!!Please Signin")
-            return redirect('signup')
+            return redirect('home')
         else:
             return HttpResponse("An error occourse!! Please try again")   
     else:
@@ -110,9 +120,16 @@ def doctors_dashboard(request):
 def profile(request):
     if request.user.is_staff :
         if  Doctor.objects.filter(user = request.user).exists():
-            data = Doctor.objects.get(user = request.user)
-            # appointment=Appointment.objects.filter(booked_for =request.user.doctor.user)
-            return render(request, 'profile.html', {'data': data})
+            if Blog.objects.filter(blog_author = request.user).exists():
+                data = Doctor.objects.get(user = request.user)
+                # appointment=Appointment.objects.get(booked_for = request.user.doctor.user)
+                contents = Blog.objects.filter(blog_author = request.user)
+                return render(request, 'profile.html', {'data': data , 'contents':contents})
+            else:
+                data = Doctor.objects.get(user = request.user)
+                # appointment=Appointment.objects.filter(booked_for =request.user.doctor.user)
+                contents = Blog.objects.filter(blog_author = request.user)
+                return render(request, 'profile.html', {'data': data})
         else:
             return redirect('add_details')
         # user_id = request.user.id

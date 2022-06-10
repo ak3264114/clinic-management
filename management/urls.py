@@ -13,6 +13,7 @@ urlpatterns = [
         path("profile/", views.profile, name="profile"),
         path("add-details/", views.add_details, name="add_details"),
         path("edit-details/", views.edit_details, name="edit_details"),
+        path('blog/', include('blog.urls')),
         path('update/', views.update ,name='update'),
         path('book-appointment/<int:doctor_id>', views.book_appointment ,name='book_appointment'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
