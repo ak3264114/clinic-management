@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block containt %}
+<style>
+    .card {
+    padding: 30px 40px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+        border: none !important;
+        box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2)
+    }
+
+    .blue-text {
+        color: #00BCD4
+    }
+
+    .form-control-label {
+        margin-bottom: 0
+    }
+
+    input,
+    textarea,
+    button {
+        padding: 8px 15px;
+        border-radius: 5px !important;
+        margin: 5px 0px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        font-size: 18px !important;
+        font-weight: 300
+    }
+
+    input:focus,
+    textarea:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        border: 1px solid #00BCD4;
+        outline-width: 0;
+        font-weight: 400
+    }
+
+    .btn-block {
+        text-transform: uppercase;
+        font-size: 15px !important;
+        font-weight: 400;
+        height: 43px;
+        cursor: pointer
+    }
+
+    .btn-block:hover {
+        color: #fff !important
+    }
+
+    button:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        outline-width: 0
+    }
+</style>
+
+    {% if messages %}
+    <div class="card notification-card notification-invitation">
+        <div class="card-body">
+        {% for message in messages %}
+                <div class="card-title">{{message}} </div>
+            {% endfor %}
+        </div>
+      </div> 
+    {% endif %}
+    <div class="container-fluid px-1 py-5 mx-auto">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+                <h3>
+                    Book an appointment
+                </h3>
+                <p class="blue-text">Use the following form to contact us and request an appointment..</p>
+                <div class="card">
+                    
+                    <form class="form-card" method="POST" action="/book-appointment/{{doctor_details.id}}">
+                    {% csrf_token %}
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-3">First name<span class="text-danger"> *</span>
+                            </label> 
+                            <input required type="text" id="fname" value="{{request.user.first_name}}" name="fname" placeholder="Please Enter Your Details in Profile Section" disabled="disabled"> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-3">Last name<span class="text-danger"> *</span></label> 
+                            <input required type="text" id="lname" name="lname" value="{{request.user.last_name}}" placeholder="Please Enter Your Details in Profile Section" disabled="disabled"> 
+                        </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                                <label class="form-control-label px-3">Email<span class="text-danger"> *</span>
+                                </label> 
+                                <input type="text" id="email" name="email" value="{{request.user.email}}" placeholder=""disabled="disabled"> 
+                            </div>
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                                <label class="form-control-label px-3">Booke for<span class="text-danger"> *</span>
+                                </label> 
+                                <input type="text" value="Dr. {{doctor_details.first_name}} {{doctor_details.last_name}}" disabled="disabled"> 
+                            </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                                <label class="form-control-label px-3">Date<span class="text-danger"> *</span>
+                                </label> 
+                                <input type="date" name="date" id="date"> 
+                            </div>
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                             <label class="form-control-label px-3">Start Time of Appointment<span class="text-danger"> *</span></label> 
+                              <input type="time" name="time" id="time"> 
+                            </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                                <label class="form-control-label px-3">Phone number<span class="text-danger"> *</span></label> 
+                                 <input type="text" id="phone" name="phone_number" placeholder=""> 
+                               </div>
+                            <div class="form-group col-sm-6 flex-column d-flex"> 
+                             <label class="form-control-label px-3">Required speciality<span class="text-danger"> *</span></label> 
+                              <input type="text" name="speciality" id="speciality"> 
+                            </div>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" onclick="checkFunction()" id="myCheck" style="appearance: auto;">
+                            <label  style="float: left; margin-left: 5px;">Check me out</label>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="form-group col-sm-6"> <button type="button" id="submit" onclick="myFunction()" class="btn-block btn-primary">Submit Request</button> </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    function checkFunction(){
+        let val1 = document.getElementById("phone").value;
+        let val2 = document.getElementById("date").value;
+        let val3 = document.getElementById("time").value;
+        let val4 = document.getElementById("speciality").value;
+
+        if(val1==""){
+            alert("Please Enter Phone Number");
+            document.getElementById("myCheck").checked = false;
+        }
+        else if( val2 =="" ){
+            alert("Please Enter Date");
+            document.getElementById("myCheck").checked = false;
+        }
+        else if( val3 ==""){
+            alert("Please Enter time");
+            document.getElementById("myCheck").checked = false;
+        }
+        else if( val4 ==""){
+            alert("Please Enter specilaty");
+            document.getElementById("myCheck").checked = false;
+        }
+    }
+    function myFunction() {
+        if(document.getElementById("myCheck").checked == true){
+            var answer = window.confirm("Are You Sure Want to Send a Request");
+            if (answer) {
+                document.getElementById("submit").type = submit;
+            }
+            else {
+                return false
+            }
+        }
+        else{
+            alert("please Click on Check box")
+        }
+      }
+</script>
+{% endblock %}

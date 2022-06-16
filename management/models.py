@@ -1,3 +1,5 @@
+import datetime
+from time import time
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -34,7 +36,11 @@ class Patient(models.Model):
         return str(self.user)
 
 class Appointment(models.Model):
-    booked_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    booked_for = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    booked_by_name = models.ForeignKey(User, on_delete=models.CASCADE)
+    booked_for_dr_name = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    date = models.DateField(blank=True)
+    time = models.TimeField(blank=True)
+    phone_number = models.IntegerField(default=0, blank=True)
+    speciality = models.TextField(max_length=100,  blank=True)
     def __str__(self):
-        return str(self.booked_for)
+        return str(self.booked_by_name)

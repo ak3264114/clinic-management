@@ -122,12 +122,11 @@ def profile(request):
         if  Doctor.objects.filter(user = request.user).exists():
             if Blog.objects.filter(blog_author = request.user).exists():
                 data = Doctor.objects.get(user = request.user)
-                # appointment=Appointment.objects.get(booked_for = request.user.doctor.user)
+                appointment=Appointment.objects.filter(booked_for_dr_name= request.user.Doctor.id)
                 contents = Blog.objects.filter(blog_author = request.user)
-                return render(request, 'profile.html', {'data': data , 'contents':contents})
+                return render(request, 'profile.html', {'data': data , 'contents':contents, 'appointment':appointment})
             else:
                 data = Doctor.objects.get(user = request.user)
-                # appointment=Appointment.objects.filter(booked_for =request.user.doctor.user)
                 contents = Blog.objects.filter(blog_author = request.user)
                 return render(request, 'profile.html', {'data': data})
         else:
@@ -136,15 +135,11 @@ def profile(request):
         # data = Doctor.objects.get(pk=user_id)
         # return render(request, 'profile.html', {'data': data})
     elif request.user.is_authenticated:
-        # user_id = request.user.id
-        # try:
-        #     data = Patient.objects.get(id=user_id).first()
-        #     return render(request, 'profile.html', {'data': data})
-        # except Patient.objects.get(id=user_id).first() is None:
-        #     return redirect('add_details')
         if  Patient.objects.filter(user = request.user).exists():
             data = Patient.objects.get(user = request.user)
-            return render(request, 'profile.html', {'data': data})
+            appointment=Appointment.objects.filter(booked_by_name =request.user)
+
+            return render(request, 'profile.html', {'data': data, 'appointment':appointment})
         else:
             return redirect('add_details')
 
@@ -244,7 +239,22 @@ def update(request):
 
 def book_appointment(request,doctor_id):
     if request.method=='POST':
-        booked_by=User.objects.get(id=request.user.id)
-        booked_for =Doctor.objects.get(id=doctor_id)
-        Appointment(booked_by=booked_by,booked_for=booked_for).save()
-        return HttpResponse('Appointment booked Succesfully <br/> <br/> <br/> <a href="/" style="border: 3px solid #00dcff; padding: 3px 10px;background-color: #91ff00ba;border-radius: 10px;" role="button">Go Back</a>')
+        booked_by_name=User.objects.get(id=request.user.id)
+        booked_for_dr_name =Doctor.objects.get(id=doctor_id)
+        date = request.POST['date']
+        time = request.POST['time']
+        phone_number = request.POST['phone_number']
+        speciality = request.POST['speciality']
+        Appointment(booked_by_name=booked_by_name,booked_for_dr_name=booked_for_dr_name , date=date, time=time, phone_number=phone_number, speciality=speciality).save() 
+        return HttpResponse("Done")     
+    if request.method=='GET':
+        if request.user.is_staff :
+            data = Doctor.objects.filter(user = request.user)
+            doctor_details = Doctor.objects.get(pk=doctor_id)
+            return render(request, 'book-appointment.html', {'data': data,'doctor_details':doctor_details})
+        elif request.user.is_authenticated:
+            data = Patient.objects.get(user = request.user)
+            doctor_details = Doctor.objects.get(pk=doctor_id)
+            return render(request, 'book-appointment.html', {'data': data, 'doctor_details':doctor_details})
+        else:
+            return render(request, 'signup.html')

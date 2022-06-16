@@ -33,10 +33,7 @@
             </ul>
             {% if user.is_authenticated%}
             <div class="card-body">
-              <form method="post" action="book-appointment/{{doctor.id}}">
-                    {% csrf_token %}
-                    <input type="submit" class=" btn btn-primary" value="Book Appointment">
-              </form>
+                <a href="book-appointment/{{doctor.id}}" class=" btn btn-primary" >Book Appointment</a>
             </div>
             {%else%}
             <div class="card-body">

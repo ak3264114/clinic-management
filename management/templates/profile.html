@@ -45,7 +45,6 @@
 <a class="edit-details" href="/edit-details/">Edit Details</a>
 <br>
 
-{% if user.is_staff%}
 <hr style="color: black;border: 3px solid black;">
 <h1 style="text-align: center; color: aqua;">Your Appointment</h1>
 <hr style="color: black;border: 3px solid black;">
@@ -54,31 +53,29 @@
     <strong style="color: red;">Message:</strong> {{ message }}
 </div>
 {% endfor %}
-
-
 {%if appointment%}
-{{appointment}}
 <div class="row g-0 card-row body-2">
   {%for appointments in appointment%}
-  {{ appointments}}
   <div class="card card-box" style="width: 20rem; margin: 20px ;">
-    <!-- <img class="card-img-top" src="{{appointment.image.url}}" alt="{{appointment.image.url}}" style="height: 20rem;" > -->
     <div class="card-body">
-      <h5 class="card-title">booked for : {{ appointments}} {{appointment.last_name}}</h5>
-      <p class="card-text">About: {{doctor.about}}</p>
+      <h5 class="card-title">booked for :  Dr. {{appointments.booked_for_dr_name}}</h5>
+      <p class="card-text"></p>
     </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">Specilization: {{appointment.specilization}}</li>
-      <li class="list-group-item">Qualification: {{appointment.qualification_higest}}</li>
+      <li class="list-group-item">Booked By : {{appointments.booked_by_name}}</li>
+      <li class="list-group-item">Date of Appointment: {{appointments.date}}</li>
+      <li class="list-group-item">End Date of Appointment: {{appointments.date}}</li>
+      <li class="list-group-item">Contact no.: {{appointments.phone_number}}</li>
+      <li class="list-group-item">Speciality: {{appointments.speciality}}</li>
   </div>
   {% endfor %}
 </div>
 {% else %}
 <h4 style="text-align:center; margin-bottom: 100px;">you don't have any appointment</h4>
 {% endif %}
-
+{% if user.is_staff%}
 <hr style="color: black;border: 3px solid black;">
-<h1 style="text-align: center; color: aqua;">Your Appointment</h1>
+<h1 style="text-align: center; color: aqua;">Your Blog</h1>
 <hr style="color: black;border: 3px solid black;">
 
 {%if contents%}
@@ -107,4 +104,7 @@
 <h4 style="text-align:center; margin-bottom: 100px;">you haven't  uploaded any blog</h4>
 {% endif %}
 {% endif %}
+<script>
+
+</script>
 {% endblock %}
